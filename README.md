@@ -26,6 +26,9 @@ This is my personal portfolio website built using:
 * Habit Streak Visualizer
 * Kannada Language Learning Bot
 * Compatibility Quiz Web App
+  
+## 🚀 View the Portfolio
+[Click here to open the Aradhya-Portfolio](https://aradhyaganiga.github.io/The-Valentines-Project/)
 
 ## 📫 Contact
 
