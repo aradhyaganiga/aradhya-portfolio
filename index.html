@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aradhya — AI & ML Developer</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:wght@300;400;500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ['Syne', 'sans-serif'],
+            mono:    ['DM Mono', 'monospace'],
+            body:    ['DM Sans', 'sans-serif'],
+          },
+        }
+      }
+    }
+  </script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    html { background-color: #0A0A0F; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background-color: #0A0A0F;
+      color: #E2E2F0;
+      overflow-x: hidden;
+    }
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: #0A0A0F; }
+    ::-webkit-scrollbar-thumb { background: #7B61FF; border-radius: 4px; }
+
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 0; opacity: 0.35;
+    }
+
+    .orb {
+      position: fixed; border-radius: 50%;
+      filter: blur(100px); pointer-events: none; z-index: 0;
+    }
+    .glass {
+      background: rgba(22,22,31,0.7);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(123,97,255,0.12);
+    }
+    .grad-text {
+      background: linear-gradient(135deg, #7B61FF 0%, #00D4AA 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .reveal {
+      opacity: 0; transform: translateY(30px);
+      transition: opacity 0.65s cubic-bezier(0.16,1,0.3,1), transform 0.65s cubic-bezier(0.16,1,0.3,1);
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    #typed-cursor {
+      display: inline-block; width: 2px; height: 1.1em;
+      background: #7B61FF; margin-left: 3px; vertical-align: middle;
+      animation: blink 1s step-end infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+    .skill-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 6px 14px; border-radius: 999px;
+      font-family: 'DM Mono', monospace; font-size: 0.78rem;
+      background: rgba(123,97,255,0.08);
+      border: 1px solid rgba(123,97,255,0.2);
+      color: #B8B0FF; transition: all 0.2s; cursor: default;
+    }
+    .skill-badge:hover {
+      background: rgba(123,97,255,0.18);
+      border-color: rgba(123,97,255,0.45);
+      color: #fff; transform: translateY(-2px);
+    }
+    .skill-badge.teal {
+      background: rgba(0,212,170,0.08);
+      border-color: rgba(0,212,170,0.2); color: #7EEEDD;
+    }
+    .skill-badge.teal:hover {
+      background: rgba(0,212,170,0.16); border-color: rgba(0,212,170,0.45);
+    }
+
+    .project-card {
+      background: rgba(22,22,31,0.8);
+      border: 1px solid rgba(123,97,255,0.1);
+      border-radius: 16px; padding: 28px;
+      transition: all 0.3s cubic-bezier(0.16,1,0.3,1);
+      position: relative; overflow: hidden;
+    }
+    .project-card::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(123,97,255,0.06) 0%, transparent 60%);
+      opacity: 0; transition: opacity 0.3s;
+    }
+    .project-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(123,97,255,0.35);
+      box-shadow: 0 20px 60px rgba(123,97,255,0.12);
+    }
+    .project-card:hover::before { opacity: 1; }
+
+    .nav-link {
+      position: relative; color: #8888AA;
+      font-family: 'DM Mono', monospace; font-size: 0.82rem;
+      letter-spacing: 0.04em; transition: color 0.2s;
+      padding-bottom: 3px; text-decoration: none;
+    }
+    .nav-link::after {
+      content: ''; position: absolute; bottom: -2px; left: 0;
+      width: 0; height: 1.5px;
+      background: linear-gradient(90deg, #7B61FF, #00D4AA);
+      transition: width 0.3s;
+    }
+    .nav-link:hover, .nav-link.active { color: #E2E2F0; }
+    .nav-link:hover::after, .nav-link.active::after { width: 100%; }
+
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px 28px; border-radius: 10px;
+      background: linear-gradient(135deg, #7B61FF, #5B41DF);
+      color: #fff; font-family: 'DM Sans', sans-serif; font-weight: 500;
+      font-size: 0.9rem; transition: all 0.25s;
+      border: none; cursor: pointer; text-decoration: none;
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(123,97,255,0.35); }
+
+    .btn-secondary {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px 28px; border-radius: 10px;
+      background: transparent; color: #E2E2F0;
+      font-family: 'DM Sans', sans-serif; font-weight: 500;
+      font-size: 0.9rem; transition: all 0.25s;
+      border: 1px solid rgba(226,226,240,0.2);
+      cursor: pointer; text-decoration: none;
+    }
+    .btn-secondary:hover { border-color: rgba(123,97,255,0.5); color: #B8B0FF; transform: translateY(-2px); }
+
+    .section-label {
+      font-family: 'DM Mono', monospace; font-size: 0.72rem;
+      letter-spacing: 0.18em; text-transform: uppercase; color: #7B61FF;
+    }
+    .form-input {
+      width: 100%; background: rgba(22,22,31,0.9);
+      border: 1px solid rgba(123,97,255,0.15);
+      border-radius: 10px; padding: 12px 16px;
+      color: #E2E2F0; font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem; transition: border-color 0.2s; outline: none;
+    }
+    .form-input:focus { border-color: rgba(123,97,255,0.5); }
+    .form-input::placeholder { color: #4A4A6A; }
+
+    .ham-line {
+      display: block; width: 22px; height: 2px;
+      background: #E2E2F0; border-radius: 2px; transition: all 0.3s;
+    }
+
+    #scroll-top {
+      position: fixed; bottom: 28px; right: 28px; z-index: 99;
+      width: 42px; height: 42px; border-radius: 10px;
+      background: linear-gradient(135deg, #7B61FF, #5B41DF);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; opacity: 0; pointer-events: none;
+      transition: opacity 0.3s, transform 0.25s;
+      border: none; box-shadow: 0 4px 20px rgba(123,97,255,0.3);
+    }
+    #scroll-top.show { opacity: 1; pointer-events: auto; }
+    #scroll-top:hover { transform: translateY(-3px); }
+
+    .achieve-card {
+      background: rgba(22,22,31,0.7);
+      border: 1px solid rgba(0,212,170,0.12);
+      border-radius: 16px; padding: 32px;
+      text-align: center; transition: all 0.3s;
+    }
+    .achieve-card:hover { border-color: rgba(0,212,170,0.3); transform: translateY(-4px); }
+
+    #mobile-menu {
+      display: none; flex-direction: column; gap: 18px;
+      padding: 24px; background: rgba(17,17,24,0.97);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(123,97,255,0.12);
+    }
+    #mobile-menu.open { display: flex; }
+  </style>
+</head>
+
+<body class="dark">
+
+  <!-- Ambient orbs -->
+  <div class="orb w-96 h-96 top-0 left-0 opacity-20" style="background:radial-gradient(circle,#7B61FF,transparent 70%)"></div>
+  <div class="orb w-80 h-80 top-1/3 right-0 opacity-15" style="background:radial-gradient(circle,#00D4AA,transparent 70%)"></div>
+  <div class="orb w-64 h-64 bottom-0 left-1/3 opacity-10" style="background:radial-gradient(circle,#7B61FF,transparent 70%)"></div>
+
+  <!-- ═══ NAVBAR ═══ -->
+  <header id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+    <nav class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+      <a href="#hero" class="font-display font-extrabold text-lg text-white tracking-tight" style="text-decoration:none">
+        <span class="grad-text">ara</span>dhya<span style="color:#7B61FF">.</span>
+      </a>
+      <div class="hidden md:flex items-center gap-8">
+        <a href="#about"        class="nav-link">about</a>
+        <a href="#skills"       class="nav-link">skills</a>
+        <a href="#projects"     class="nav-link">projects</a>
+        <a href="#achievements" class="nav-link">achievements</a>
+        <a href="#contact"      class="nav-link">contact</a>
+      </div>
+      <button id="ham-btn" class="md:hidden flex flex-col gap-1.5 p-2 bg-transparent border-none cursor-pointer z-50" aria-label="Menu">
+        <span class="ham-line" id="ham1"></span>
+        <span class="ham-line" id="ham2"></span>
+        <span class="ham-line" id="ham3"></span>
+      </button>
+    </nav>
+    <div id="mobile-menu">
+      <a href="#about"        class="nav-link text-base" onclick="closeMenu()">about</a>
+      <a href="#skills"       class="nav-link text-base" onclick="closeMenu()">skills</a>
+      <a href="#projects"     class="nav-link text-base" onclick="closeMenu()">projects</a>
+      <a href="#achievements" class="nav-link text-base" onclick="closeMenu()">achievements</a>
+      <a href="#contact"      class="nav-link text-base" onclick="closeMenu()">contact</a>
+    </div>
+  </header>
+
+  <main class="relative z-10">
+
+    <!-- ═══ HERO ═══ -->
+    <section id="hero" class="min-h-screen flex items-center justify-center pt-16 px-6">
+      <div class="max-w-4xl mx-auto text-center">
+        <div class="reveal mb-6 inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass text-xs font-mono" style="color:#8888AA">
+          <span class="w-1.5 h-1.5 rounded-full" style="background:#00D4AA;animation:blink 2s ease infinite"></span>
+          Available for opportunities · India
+        </div>
+        <h1 class="reveal font-display font-extrabold leading-none tracking-tight mb-5"
+            style="font-size:clamp(3rem,10vw,7rem);animation-delay:0.1s">Aradhya</h1>
+        <p class="reveal text-lg md:text-xl font-mono mb-8" style="color:#8888AA;animation-delay:0.2s">
+          <span id="typed-text"></span><span id="typed-cursor"></span>
+        </p>
+        <p class="reveal max-w-xl mx-auto leading-relaxed mb-10" style="font-size:1rem;color:#8888AA;animation-delay:0.3s">
+          Building intelligent systems at the intersection of AI, machine learning,
+          and full-stack engineering. Undergraduate @ BMSCE, Bengaluru.
+        </p>
+        <div class="reveal flex flex-wrap gap-4 justify-center" style="animation-delay:0.4s">
+          <a href="#projects" class="btn-primary">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+            View Projects
+          </a>
+          <a href="#contact" class="btn-secondary">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            Contact Me
+          </a>
+        </div>
+        <div class="reveal mt-20 flex flex-col items-center gap-2" style="opacity:0.35;animation-delay:0.6s">
+          <span style="font-size:0.7rem;font-family:'DM Mono',monospace;letter-spacing:0.18em">SCROLL</span>
+          <div style="width:1px;height:40px;background:linear-gradient(to bottom,#7B61FF,transparent)"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ ABOUT ═══ -->
+    <section id="about" class="py-28 px-6">
+      <div class="max-w-6xl mx-auto">
+        <div class="grid md:grid-cols-2 gap-16 items-center">
+          <div>
+            <p class="reveal section-label mb-4">01 / about me</p>
+            <h2 class="reveal font-display font-bold text-4xl md:text-5xl mb-6" style="color:#E2E2F0;animation-delay:0.1s">
+              Crafting intelligence,<br><span class="grad-text">one model at a time.</span>
+            </h2>
+            <div class="reveal space-y-4 leading-relaxed" style="color:#8888AA;animation-delay:0.2s">
+              <p>I'm <strong style="color:#E2E2F0">Aradhya</strong>, an AI & Machine Learning undergraduate passionate about building systems that think, learn, and scale. I work across the full stack — from training neural networks and designing robust backend APIs and polished web interfaces.</p>
+              <p>My focus areas include <span style="color:#7B61FF;font-weight:500">Machine learning</span>, <span style="color:#00D4AA;font-weight:500">Deep Learning</span>, and architecting <span style="color:#7B61FF;font-weight:500">scalable backend systems</span> that handle real-world complexity without flinching.</p>
+              <p>When I'm not training models, I'm solving DSA problems and MySQL and exploring the edge of what's possible with LLMs and generative AI.</p>
+            </div>
+          </div>
+          <div class="reveal" style="animation-delay:0.3s">
+            <div class="glass rounded-2xl p-8">
+              <p style="font-size:0.72rem;font-family:'DM Mono',monospace;letter-spacing:0.15em;text-transform:uppercase;color:#8888AA;margin-bottom:1.5rem">Quick tech snapshot</p>
+              <div class="flex flex-wrap gap-2">
+                <span class="skill-badge">Python</span><span class="skill-badge">C</span>
+                <span class="skill-badge teal">C++</span><span class="skill-badge">Java</span>
+                <span class="skill-badge teal">Numpy</span><span class="skill-badge">Matplotlib</span>
+                <span class="skill-badge teal">Pandas</span><span class="skill-badge">MySQL</span>
+                <span class="skill-badge teal">Scikit-learn</span><span class="skill-badge">OpenCV</span>
+                <span class="skill-badge teal">Git</span><span class="skill-badge">HTML</span>
+                <span class="skill-badge teal">CSS</span><span class="skill-badge">JavaScript</span>
+                <span class="skill-badge teal">Flask</span>
+              </div>
+              <div class="grid grid-cols-3 gap-4 mt-8 pt-8" style="border-top:1px solid rgba(255,255,255,0.05)">
+                <div class="text-center">
+                  <p class="font-display font-bold text-2xl grad-text">3+</p>
+                  <p style="font-size:0.75rem;color:#8888AA;margin-top:4px">Projects</p>
+                </div>
+                <div class="text-center">
+                  <p class="font-display font-bold text-2xl grad-text">100+</p>
+                  <p style="font-size:0.75rem;color:#8888AA;margin-top:4px">DSA Solved</p>
+                </div>
+                <div class="text-center">
+                  <p class="font-display font-bold text-2xl grad-text">AI/ML</p>
+                  <p style="font-size:0.75rem;color:#8888AA;margin-top:4px">Focus</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ SKILLS ═══ -->
+    <section id="skills" class="py-28 px-6">
+      <div class="max-w-6xl mx-auto">
+        <div class="text-center mb-16">
+          <p class="reveal section-label mb-4">02 / technical skills</p>
+          <h2 class="reveal font-display font-bold text-4xl md:text-5xl" style="color:#E2E2F0;animation-delay:0.1s">
+            Tools of the <span class="grad-text">trade</span>
+          </h2>
+        </div>
+        <div id="skills-grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+      </div>
+    </section>
+
+    <!-- ═══ PROJECTS ═══ -->
+    <section id="projects" class="py-28 px-6">
+      <div class="max-w-6xl mx-auto">
+        <div class="text-center mb-16">
+          <p class="reveal section-label mb-4">03 / projects</p>
+          <h2 class="reveal font-display font-bold text-4xl md:text-5xl" style="color:#E2E2F0;animation-delay:0.1s">
+            Things I've <span class="grad-text">built</span>
+          </h2>
+          <p class="reveal mt-4 max-w-lg mx-auto" style="color:#8888AA;animation-delay:0.2s">
+            A selection of projects spanning Feature Engineering, and full-stack development.
+          </p>
+        </div>
+        <div id="projects-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+      </div>
+    </section>
+
+    <!-- ═══ ACHIEVEMENTS ═══ -->
+    <section id="achievements" class="py-28 px-6">
+      <div class="max-w-6xl mx-auto">
+        <div class="text-center mb-16">
+          <p class="reveal section-label mb-4">04 / achievements</p>
+          <h2 class="reveal font-display font-bold text-4xl md:text-5xl" style="color:#E2E2F0;animation-delay:0.1s">
+            Milestones &amp; <span class="grad-text">recognition</span>
+          </h2>
+        </div>
+        <div id="achievements-grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+      </div>
+    </section>
+
+    <!-- ═══ CONTACT ═══ -->
+    <section id="contact" class="py-28 px-6">
+      <div class="max-w-5xl mx-auto">
+        <div class="text-center mb-16">
+          <p class="reveal section-label mb-4">05 / contact</p>
+          <h2 class="reveal font-display font-bold text-4xl md:text-5xl" style="color:#E2E2F0;animation-delay:0.1s">
+            Let's <span class="grad-text">connect</span>
+          </h2>
+          <p class="reveal mt-4 max-w-md mx-auto" style="color:#8888AA;animation-delay:0.2s">
+            Open to research collaborations, internships, or a good conversation about AI.
+          </p>
+        </div>
+        <div class="grid md:grid-cols-2 gap-10">
+          <div class="reveal space-y-4" style="animation-delay:0.1s">
+            <a href="mailto:aradhya.ai23@bmsce.ac.in" class="flex items-center gap-4 glass rounded-xl p-5" style="transition:border-color 0.2s;text-decoration:none" onmouseover="this.style.borderColor='rgba(123,97,255,0.4)'" onmouseout="this.style.borderColor='rgba(123,97,255,0.12)'">
+              <div class="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style="background:rgba(123,97,255,0.1)">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7B61FF" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              </div>
+              <div>
+                <p style="font-size:0.72rem;font-family:'DM Mono',monospace;color:#8888AA;margin-bottom:2px">email</p>
+                <p style="color:#E2E2F0;font-size:0.875rem">actionganiga@gmail.com</p>
+              </div>
+            </a>
+            <a href="https://github.com/aradhyaganiga" target="_blank" rel="noopener" class="flex items-center gap-4 glass rounded-xl p-5" style="transition:border-color 0.2s;text-decoration:none" onmouseover="this.style.borderColor='rgba(123,97,255,0.4)'" onmouseout="this.style.borderColor='rgba(123,97,255,0.12)'">
+              <div class="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style="background:rgba(123,97,255,0.1)">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7B61FF" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+              </div>
+              <div>
+                <p style="font-size:0.72rem;font-family:'DM Mono',monospace;color:#8888AA;margin-bottom:2px">github</p>
+                <p style="color:#E2E2F0;font-size:0.875rem">github.com/aradhyaganiga</p>
+              </div>
+            </a>
+            <a href="https://linkedin.com/in/aradhya-ganiga" target="_blank" rel="noopener" class="flex items-center gap-4 glass rounded-xl p-5" style="transition:border-color 0.2s;text-decoration:none;border-color:rgba(0,212,170,0.12)" onmouseover="this.style.borderColor='rgba(0,212,170,0.4)'" onmouseout="this.style.borderColor='rgba(0,212,170,0.12)'">
+              <div class="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style="background:rgba(0,212,170,0.1)">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00D4AA" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+              </div>
+              <div>
+                <p style="font-size:0.72rem;font-family:'DM Mono',monospace;color:#8888AA;margin-bottom:2px">linkedin</p>
+                <p style="color:#E2E2F0;font-size:0.875rem">linkedin.com/in/aradhya-ganiga</p>
+              </div>
+            </a>
+          </div>
+          <div class="reveal glass rounded-2xl p-8" style="animation-delay:0.2s">
+            <p class="font-display font-semibold text-lg mb-6" style="color:#E2E2F0">Send a message</p>
+            <div class="space-y-4">
+              <div>
+                <label style="font-size:0.72rem;font-family:'DM Mono',monospace;color:#8888AA;display:block;margin-bottom:8px">name</label>
+                <input type="text" placeholder="Your name" class="form-input" />
+              </div>
+              <div>
+                <label style="font-size:0.72rem;font-family:'DM Mono',monospace;color:#8888AA;display:block;margin-bottom:8px">email</label>
+                <input type="email" placeholder="your@email.com" class="form-input" />
+              </div>
+              <div>
+                <label style="font-size:0.72rem;font-family:'DM Mono',monospace;color:#8888AA;display:block;margin-bottom:8px">message</label>
+                <textarea placeholder="What's on your mind?" rows="4" class="form-input" style="resize:none"></textarea>
+              </div>
+              <button class="btn-primary w-full justify-center mt-2" onclick="handleFormSubmit(event)">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                Send Message
+              </button>
+              <p id="form-msg" class="text-center text-xs hidden mt-2" style="color:#00D4AA">✓ Message sent! I'll get back to you soon.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ═══ FOOTER ═══ -->
+  <footer class="py-10 px-6 relative z-10" style="border-top:1px solid rgba(123,97,255,0.1)">
+    <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+      <p class="font-display font-bold text-lg"><span class="grad-text">ara</span>dhya<span style="color:#7B61FF">.</span></p>
+      <p style="font-size:0.75rem;color:#8888AA;font-family:'DM Mono',monospace">© 2025 Aradhya · Built with curiosity &amp; caffeine</p>
+      <div class="flex gap-5">
+        <a href="https://github.com/aradhyaganiga" target="_blank" style="color:#8888AA;transition:color 0.2s" onmouseover="this.style.color='#E2E2F0'" onmouseout="this.style.color='#8888AA'">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+        </a>
+        <a href="https://linkedin.com/in/aradhya-ganiga" target="_blank" style="color:#8888AA;transition:color 0.2s" onmouseover="this.style.color='#E2E2F0'" onmouseout="this.style.color='#8888AA'">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+        </a>
+        <a href="mailto:actionganiga@gmail.com" style="color:#8888AA;transition:color 0.2s" onmouseover="this.style.color='#E2E2F0'" onmouseout="this.style.color='#8888AA'">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <button id="scroll-top" aria-label="Scroll to top" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
+  </button>
+
+  <script>
+    /* ══════════════════════════════
+       DATA  —  edit these arrays!
+    ══════════════════════════════ */
+
+    // Skills: push new objects to add categories
+    const SKILLS = [
+      { category:'Languages',    icon:'{ }', variant:'accent', items:['Python','Java','C','C++'] },
+      { category:'Backend',      icon:'⚡',  variant:'teal',   items:['Flask','Django','REST APIs','WebSockets'] },
+      { category:'ML / Data',    icon:'🧠',  variant:'accent', items:['Matplotlib','Scikit-learn','Pandas','NumPy','OpenCV'] },
+      { category:'Frontend',     icon:'◈',   variant:'teal',   items:['HTML5','CSS3','Tailwind CSS','JavaScript'] },
+      { category:'Database',     icon:'⊞',   variant:'accent', items:['MySQL','SQLite','MongoDB(Basics)'] },
+      { category:'Tools & DevOps',icon:'⚙', variant:'teal',   items:['Git','GitHub Actions','Jupyter','VS Code'] },
+    ];
+
+    // Projects: push new objects to add projects
+    // Fields: title, description, tech[], github, demo (optional)
+    const PROJECTS = [
+      {
+        title: 'Habit Streak Visualizer',
+        description: 'A full-stack productivity app that tracks daily habits and visualises streaks with heatmaps and analytics dashboards — keeping you accountable and motivated.',
+        tech: ['Flask(Python)','MySQL','HTML','CSS','JavaScript','charts.js','SQLAlchemy'],
+        github: 'https://github.com/aradhyaganiga',
+        demo: '',
+      },
+      {
+        title: 'Kannada Language Learning Bot',
+        description: 'Developed a web-based chatbot for Kannada language learning. Designed responsive UI and backend logic,with relational schema design to store vocabulary,user progress, quiz scores and available with flashcards.',
+        tech: ['Flask(Python)','HTML','CSS','JavaScript','MySQL','SQLAlchemy'],
+        github: 'https://github.com/aradhyaganiga',
+        demo: '',
+      },
+      {
+        title: 'Compatibility Quiz Web App',
+        description: 'Implemented a quiz application to compute compatibility scores using a weighted scoring algorithm. Designed modular backend logic and clean UI for personalized result generation',
+        tech: ['Flask(Python)','JavaScript','Scikit-learn','MySQL','Tailwind CSS','HTML','Weighted Scoring'],
+        github: 'https://github.com/aradhyaganiga',
+        demo: '',
+      },
+      // ✦ Add new projects here:
+      // { title:'', description:'', tech:[], github:'', demo:'' },
+    ];
+
+    // Achievements: push new objects to add more
+    const ACHIEVEMENTS = [
+      { icon:'★', value:'100+', label:'HackerRank DSA Problems', detail:'Solved 100+ DSA problems covering arrays, trees, graphs, and dynamic programming.', variant:'accent' },
+      { icon:'◆', value:'AI/ML', label:'Undergraduate Specialisation', detail:'Pursuing a focused AI & ML curriculum at BMS College of Engineering, Bengaluru.', variant:'teal' },
+      { icon:'⬡', value:'Open',  label:'Source Contributor', detail:'Active contributor to open-source AI and developer tooling projects on GitHub.', variant:'accent' },
+    ];
+
+    /* ══════════════════════════════
+       RENDERERS
+    ══════════════════════════════ */
+    function renderSkills() {
+      document.getElementById('skills-grid').innerHTML = SKILLS.map((c,i) => `
+        <div class="reveal project-card" style="animation-delay:${i*0.07}s">
+          <div class="flex items-center gap-3 mb-5">
+            <span style="font-size:1.2rem">${c.icon}</span>
+            <h3 class="font-display font-semibold text-base" style="color:#E2E2F0">${c.category}</h3>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            ${c.items.map(s=>`<span class="skill-badge ${c.variant==='teal'?'teal':''}">${s}</span>`).join('')}
+          </div>
+        </div>`).join('');
+    }
+
+    function renderProjects() {
+      document.getElementById('projects-grid').innerHTML = PROJECTS.map((p,i) => `
+        <div class="reveal project-card flex flex-col" style="animation-delay:${i*0.1}s">
+          <div class="flex items-start justify-between mb-4">
+            <div style="width:40px;height:40px;border-radius:8px;background:rgba(123,97,255,0.1);display:flex;align-items:center;justify-content:center;color:#7B61FF;font-size:1.2rem">⬡</div>
+            <div class="flex gap-2">
+              <a href="${p.github}" target="_blank" rel="noopener" title="GitHub"
+                 style="width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.05);color:#8888AA;transition:color 0.2s;text-decoration:none"
+                 onmouseover="this.style.color='#E2E2F0'" onmouseout="this.style.color='#8888AA'">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+              </a>
+              ${p.demo?`<a href="${p.demo}" target="_blank" rel="noopener" title="Live Demo"
+                 style="width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.05);color:#8888AA;transition:color 0.2s;text-decoration:none"
+                 onmouseover="this.style.color='#E2E2F0'" onmouseout="this.style.color='#8888AA'">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              </a>`:''}
+            </div>
+          </div>
+          <h3 class="font-display font-semibold text-lg mb-2" style="color:#E2E2F0">${p.title}</h3>
+          <p class="text-sm leading-relaxed mb-5 flex-1" style="color:#8888AA">${p.description}</p>
+          <div class="flex flex-wrap gap-1.5">
+            ${p.tech.map(t=>`<span class="skill-badge" style="font-size:0.73rem;padding:4px 10px">${t}</span>`).join('')}
+          </div>
+        </div>`).join('');
+    }
+
+    function renderAchievements() {
+      document.getElementById('achievements-grid').innerHTML = ACHIEVEMENTS.map((a,i) => `
+        <div class="reveal achieve-card" style="animation-delay:${i*0.1}s">
+          <div style="font-size:2.5rem;margin-bottom:1rem;color:${a.variant==='teal'?'#00D4AA':'#7B61FF'}">${a.icon}</div>
+          <p class="font-display font-bold text-3xl mb-1 grad-text">${a.value}</p>
+          <p class="font-semibold text-sm mb-3" style="color:#E2E2F0">${a.label}</p>
+          <p class="text-sm leading-relaxed" style="color:#8888AA">${a.detail}</p>
+        </div>`).join('');
+    }
+
+    /* ══════════════════════════════
+       TYPING ANIMATION
+    ══════════════════════════════ */
+    const TYPED_STRINGS = ['AI Developer','ML Engineer','Backend Architect','System Design Enthusiast','Full Stack Dev'];
+    let tIdx=0, cIdx=0, deleting=false;
+    const typedEl = document.getElementById('typed-text');
+    function typeLoop() {
+      const cur = TYPED_STRINGS[tIdx];
+      typedEl.textContent = deleting ? cur.slice(0,cIdx--) : cur.slice(0,cIdx++);
+      if (!deleting && cIdx > cur.length)  { deleting=true; setTimeout(typeLoop,1600); return; }
+      if (deleting  && cIdx < 0)           { deleting=false; cIdx=0; tIdx=(tIdx+1)%TYPED_STRINGS.length; setTimeout(typeLoop,300); return; }
+      setTimeout(typeLoop, deleting?55:95);
+    }
+
+    /* ══════════════════════════════
+       SCROLL REVEAL
+    ══════════════════════════════ */
+    function initReveal() {
+      const io = new IntersectionObserver(entries=>{
+        entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('visible'); io.unobserve(e.target); } });
+      },{ threshold:0.1, rootMargin:'0px 0px -40px 0px' });
+      document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+    }
+
+    /* ══════════════════════════════
+       ACTIVE NAV
+    ══════════════════════════════ */
+    function initActiveNav() {
+      const sections = document.querySelectorAll('section[id]');
+      const links    = document.querySelectorAll('a.nav-link[href^="#"]');
+      const io = new IntersectionObserver(entries=>{
+        entries.forEach(e=>{ if(e.isIntersecting){ links.forEach(l=>l.classList.remove('active')); const a=document.querySelector(`a.nav-link[href="#${e.target.id}"]`); if(a) a.classList.add('active'); } });
+      },{ threshold:0.45 });
+      sections.forEach(s=>io.observe(s));
+    }
+
+    /* ══════════════════════════════
+       NAVBAR BG ON SCROLL
+    ══════════════════════════════ */
+    function initNavScroll() {
+      const nav = document.getElementById('navbar');
+      window.addEventListener('scroll',()=>{
+        nav.style.cssText = window.scrollY>50
+          ? 'background:rgba(10,10,15,0.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(123,97,255,0.1)'
+          : 'background:transparent;backdrop-filter:none;border-bottom:none';
+      },{passive:true});
+    }
+
+    /* ══════════════════════════════
+       SCROLL TO TOP
+    ══════════════════════════════ */
+    function initScrollTop() {
+      const btn = document.getElementById('scroll-top');
+      window.addEventListener('scroll',()=>btn.classList.toggle('show',window.scrollY>400),{passive:true});
+    }
+
+    /* ══════════════════════════════
+       HAMBURGER
+    ══════════════════════════════ */
+    let menuOpen=false;
+    document.getElementById('ham-btn').addEventListener('click',()=>{
+      menuOpen=!menuOpen;
+      document.getElementById('mobile-menu').classList.toggle('open',menuOpen);
+      const [h1,h2,h3]=['ham1','ham2','ham3'].map(id=>document.getElementById(id));
+      if(menuOpen){ h1.style.transform='rotate(45deg) translate(5px,5px)'; h2.style.opacity='0'; h3.style.transform='rotate(-45deg) translate(5px,-5px)'; }
+      else { h1.style.transform=h3.style.transform=''; h2.style.opacity='1'; }
+    });
+    function closeMenu(){
+      menuOpen=false;
+      document.getElementById('mobile-menu').classList.remove('open');
+      ['ham1','ham2','ham3'].forEach(id=>{ const el=document.getElementById(id); el.style.transform=''; el.style.opacity='1'; });
+    }
+
+    /* ══════════════════════════════
+       FORM
+    ══════════════════════════════ */
+    function handleFormSubmit(e){
+      e.preventDefault();
+      const m=document.getElementById('form-msg');
+      m.classList.remove('hidden');
+      setTimeout(()=>m.classList.add('hidden'),4500);
+    }
+
+    /* ══════════════════════════════
+       BOOTSTRAP
+    ══════════════════════════════ */
+    document.addEventListener('DOMContentLoaded',()=>{
+      renderSkills();
+      renderProjects();
+      renderAchievements();
+      requestAnimationFrame(()=>{
+        initReveal();
+        initActiveNav();
+        initNavScroll();
+        initScrollTop();
+        setTimeout(typeLoop,700);
+      });
+    });
+  </script>
+</body>
+</html>
