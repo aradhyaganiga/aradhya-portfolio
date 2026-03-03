@@ -28,7 +28,7 @@ This is my personal portfolio website built using:
 * Compatibility Quiz Web App
   
 ## 🚀 View the Portfolio
-[Click here to open the Aradhya-Portfolio](https://aradhyaganiga.github.io/The-Valentines-Project/)
+[Click here to open the Aradhya-Portfolio](https://aradhyaganiga.github.io/aradhya-portfolio/)
 
 ## 📫 Contact
 
